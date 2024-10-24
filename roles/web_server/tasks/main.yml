@@ -1,4 +1,4 @@
----
+--
 - name: Install Git
   apt:
     name: git
@@ -17,6 +17,30 @@
     state: present
     update_cache: yes
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 - name: Allow HTTP traffic
   ufw:
     rule: allow
@@ -34,12 +58,8 @@
 - name: Allow OpenSSH traffic
   ufw:
     rule: allow
-
     port: '22'
     proto: 'tcp'
-
-
-
 
 - name: Enable UFW
   ufw:
@@ -84,6 +104,9 @@
 
 
 
+
+
+
 - name: Install necessary polyfills
   command: npm install os-browserify path-browserify crypto-browserify stream-browserify buffer
   args:
@@ -104,6 +127,9 @@
   command: npm run build
   args:
     chdir: /var/www/inventory-app2
+
+
+
 
 
 - name: Install pm2 globally
@@ -137,5 +163,8 @@
 
 - name: Reload Nginx to apply changes
   command: nginx -s reload
+
+
+
 
 
