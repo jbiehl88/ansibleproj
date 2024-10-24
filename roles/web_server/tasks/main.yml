@@ -17,14 +17,38 @@
     state: present
     update_cache: yes
 
-- name: Allow Nginx Full in UFW
+- name: Allow HTTP traffic
   ufw:
     rule: allow
-    name: 'Nginx Full'
+
+    port: '80'
+    proto: 'tcp'
+
+- name: Allow HTTPS traffic
+  ufw:
+    rule: allow
+
+    port: '443'
+    proto: 'tcp'
+
+- name: Allow OpenSSH traffic
+  ufw:
+    rule: allow
+
+    port: '22'
+    proto: 'tcp'
+
+
+
 
 - name: Enable UFW
   ufw:
     state: enabled
+
+- name: Remove existing directory
+  file:
+    path: /var/www/inventory-app2
+    state: absent
 
 - name: Clone the repository
   git:
@@ -44,8 +68,24 @@
   args:
     chdir: /var/www/inventory-app2
 
-- name: Run npm build
-  command: npm run build
+- name: Set ownership for /var/www/inventory-app2
+  file:
+    path: /var/www/inventory-app2
+    owner: www-data
+    group: www-data
+    recurse: yes
+
+- name: Set correct permissions for the /var/www/inventory-app2
+  file:
+    path: /var/www/inventory-app2
+    mode: '0755'
+    recurse: yes
+
+
+
+
+- name: Install necessary polyfills
+  command: npm install os-browserify path-browserify crypto-browserify stream-browserify buffer
   args:
     chdir: /var/www/inventory-app2
 
@@ -59,6 +99,12 @@
       DB_NAME={{ db_name }}
       DB_PORT={{ db_port }}
       API_SERVER={{ api_server }}
+
+- name: Run npm build
+  command: npm run build
+  args:
+    chdir: /var/www/inventory-app2
+
 
 - name: Install pm2 globally
   npm:
@@ -91,76 +137,5 @@
 
 - name: Reload Nginx to apply changes
   command: nginx -s reload
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
 
 
