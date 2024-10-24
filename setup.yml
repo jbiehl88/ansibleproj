@@ -1,0 +1,19 @@
+---
+- name: Install python dependencies 
+  hosts: all
+  roles:
+    - python
+
+
+- name: Install PostgreSQL on DB server
+  hosts: database
+  become: yes
+
+  roles:
+    - pg_db 
+
+- name: Install Nginx on Web servers
+  hosts: web_servers
+  become: yes
+  roles:
+    - web_server

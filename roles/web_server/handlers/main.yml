@@ -1,0 +1,13 @@
+---
+# handlers file for web_server
+- name: Ensure Nginx is running
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+
+
+
+
+

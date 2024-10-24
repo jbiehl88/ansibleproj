@@ -1,0 +1,166 @@
+---
+- name: Install Git
+  apt:
+    name: git
+    state: present
+    update_cache: yes
+
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Allow Nginx Full in UFW
+  ufw:
+    rule: allow
+    name: 'Nginx Full'
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+
+- name: Clone the repository
+  git:
+    repo: https://github.com/jbiehl88/inventory-app2.git
+    dest: /var/www/inventory-app2
+
+- name: Install Node.js and npm
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nodejs
+    - npm
+
+- name: Install project dependencies
+  command: npm install
+  args:
+    chdir: /var/www/inventory-app2
+
+- name: Run npm build
+  command: npm run build
+  args:
+    chdir: /var/www/inventory-app2
+
+- name: Create .env file
+  copy:
+    dest: /var/www/inventory-app2/.env
+    content: |
+      DB_HOST={{ db_host }}
+      DB_USER={{ db_user }}
+      DB_PASS={{ db_password }}
+      DB_NAME={{ db_name }}
+      DB_PORT={{ db_port }}
+      API_SERVER={{ api_server }}
+
+- name: Install pm2 globally
+  npm:
+    name: pm2
+    global: yes
+    state: present
+
+- name: Start server with pm2
+  command: pm2 start server.js --name inventory-app
+  args:
+    chdir: /var/www/inventory-app2
+
+- name: Configure Nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/inventory-app2
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/inventory-app2
+    dest: /etc/nginx/sites-enabled/inventory-app2
+    state: link
+
+- name: Restart Nginx
+  service:
+    name: nginx
+    state: restarted
+  notify:
+    - Ensure Nginx is running
+
+- name: Reload Nginx to apply changes
+  command: nginx -s reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
