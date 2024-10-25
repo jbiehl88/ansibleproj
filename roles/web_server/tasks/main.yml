@@ -82,7 +82,6 @@
     path: /etc/nginx/sites-enabled/default
     state: absent
 
-
 - name: Install Node.js and npm
   apt:
     name: "{{ item }}"
@@ -95,43 +94,6 @@
   command: npm install
   args:
     chdir: /var/www/inventory-app2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
-
-
-
-
-
-
-
 
 - name: Run npm build
   command: npm run build
@@ -165,10 +127,6 @@
   args:
     chdir: /var/www/inventory-app2
   when: pm2_restart_result is defined and pm2_restart_result.rc != 0 # Only run if the restart failed
-
-
-
-
 
 - name: Restart Nginx
   service:
