@@ -17,6 +17,12 @@
     state: present
     update_cache: yes
 
+- name: Configure Nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/inventory-app2
+
+
 - name: Allow HTTP traffic
   ufw:
     rule: allow
@@ -73,8 +79,24 @@
   args:
     chdir: /var/www/inventory-app2
 
-- name: Install react-scripts
-  command: npm install react-scripts --save
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- name: Run npm build
+  command: npm run build
   args:
     chdir: /var/www/inventory-app2
 
@@ -89,10 +111,6 @@
     path: /var/www/inventory-app2/.env
     mode: '0600'
 
-- name: Run npm build
-  command: npm run build
-  args:
-    chdir: /var/www/inventory-app2
 
 - name: Install pm2 globally
   npm:
@@ -105,10 +123,10 @@
   args:
     chdir: /var/www/inventory-app2
 
-- name: Configure Nginx
-  template:
-    src: nginx.conf.j2
-    dest: /etc/nginx/sites-available/inventory-app2
+
+
+
+
 
 - name: Enable Nginx site
   file:
