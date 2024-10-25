@@ -17,18 +17,6 @@
     state: present
     update_cache: yes
 
-
-
-
-
-
-
-
-
-
-
-
-
 - name: Allow HTTP traffic
   ufw:
     rule: allow
@@ -77,13 +65,11 @@
     src: nginx.conf.j2
     dest: /var/www/inventory-app2
 
-
 - name: Enable Nginx site
   file:
     src: /etc/nginx/sites-available/inventory-app2
     dest: /etc/nginx/sites-enabled/inventory-app2
     state: link
-
 
 - name: Install Node.js and npm
   apt:
@@ -133,18 +119,6 @@
 
               new NodePolyfillPlugin(),
           ],
-
-
-
-
-
-
-
-
-
-
-
-
       };
 
 - name: Run npm build
@@ -173,12 +147,6 @@
   command: pm2 start server.js --name inventory-app
   args:
     chdir: /var/www/inventory-app2
-
-
-
-
-
-
 
 - name: Restart Nginx
   service:
