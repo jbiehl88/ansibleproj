@@ -1,4 +1,4 @@
---
+---
 - name: Install Git
   apt:
     name: git
@@ -16,6 +16,18 @@
     name: nginx
     state: present
     update_cache: yes
+
+
+
+
+
+
+
+
+
+
+
+
 
 - name: Allow HTTP traffic
   ufw:
@@ -49,6 +61,18 @@
     repo: https://github.com/jbiehl88/inventory-app2.git
     dest: /var/www/inventory-app2
 
+- name: Create .env file
+  copy:
+    dest: /var/www/inventory-app2/.env
+    content: |
+      REACT_APP_DB_HOST={{ db_host }}
+      REACT_APP_DB_USER={{ db_user }}
+      REACT_APP_DB_PASS={{ db_password }}
+      REACT_APP_DB_NAME={{ db_name }}
+      REACT_APP_DB_PORT={{ db_port }}
+      REACT_APP_API_SERVER={{ api_server }}
+
+
 - name: Install Node.js and npm
   apt:
     name: "{{ item }}"
@@ -62,12 +86,13 @@
   args:
     chdir: /var/www/inventory-app2
 
-- name: Set ownership for /var/www/inventory-app2
-  file:
-    path: /var/www/inventory-app2
-    owner: www-data
-    group: www-data
-    recurse: yes
+- name: Install react-scripts
+  command: npm install react-scripts --save
+  args:
+    chdir: /var/www/inventory-app2
+
+
+
 
 - name: Set correct permissions for the /var/www/inventory-app2
   file:
@@ -75,21 +100,65 @@
     mode: '0755'
     recurse: yes
 
-- name: Install necessary polyfills
-  command: npm install os-browserify path-browserify crypto-browserify stream-browserify buffer
-  args:
-    chdir: /var/www/inventory-app2
+- name: Set permissions for .env file
+  file:
+    path: /var/www/inventory-app2/.env
+    mode: '0600'
 
-- name: Create .env file
-  copy:
-    dest: /var/www/inventory-app2/.env
-    content: |
-      DB_HOST={{ db_host }}
-      DB_USER={{ db_user }}
-      DB_PASS={{ db_password }}
-      DB_NAME={{ db_name }}
-      DB_PORT={{ db_port }}
-      API_SERVER={{ api_server }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 - name: Run npm build
   command: npm run build
