@@ -17,10 +17,17 @@
     state: present
     update_cache: yes
 
-- name: Configure Nginx
-  template:
-    src: nginx.conf.j2
-    dest: /etc/nginx/sites-available/inventory-app2
+
+
+
+
+
+
+
+
+
+
+
 
 - name: Allow HTTP traffic
   ufw:
@@ -65,6 +72,19 @@
       REACT_APP_DB_PORT={{ db_port }}
       REACT_APP_API_SERVER={{ api_server }}
 
+- name: Configure Nginx
+  template:
+    src: nginx.conf.j2
+    dest: /var/www/inventory-app2
+
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/inventory-app2
+    dest: /etc/nginx/sites-enabled/inventory-app2
+    state: link
+
+
 - name: Install Node.js and npm
   apt:
     name: "{{ item }}"
@@ -77,6 +97,55 @@
   command: npm install
   args:
     chdir: /var/www/inventory-app2
+
+- name: Install node-polyfill-webpack-plugin
+  command: npm install  node-polyfill-webpack-plugin --save
+  args:
+    chdir: /var/www/inventory-app2
+
+- name: Install browserify-fs
+  command: npm install browserify-fs --save
+  args:
+    chdir: /var/www/inventory-app2
+
+- name: Create webpack.config.js
+  copy:
+    dest: /var/www/inventory-app2/webpack.config.js
+    content: |
+      const path = require('path');
+
+      const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
+      module.exports = {
+          entry: './src/index.js',
+          output: {
+
+              filename: 'bundle.js',
+              path: path.resolve(__dirname, 'dist'),
+          },
+          resolve: {
+              fallback: {
+                  fs: require.resolve('browserify-fs'),
+                  
+              },
+          },
+          plugins: [
+
+              new NodePolyfillPlugin(),
+          ],
+
+
+
+
+
+
+
+
+
+
+
+
+      };
 
 - name: Run npm build
   command: npm run build
@@ -105,11 +174,11 @@
   args:
     chdir: /var/www/inventory-app2
 
-- name: Enable Nginx site
-  file:
-    src: /etc/nginx/sites-available/inventory-app2
-    dest: /etc/nginx/sites-enabled/inventory-app2
-    state: link
+
+
+
+
+
 
 - name: Restart Nginx
   service:
