@@ -35,6 +35,12 @@
     port: '22'
     proto: 'tcp'
 
+- name: Allow traffic on for api server
+  ufw:
+    rule: allow
+    port: '3000'
+    proto: 'tcp'
+
 - name: Enable UFW
   ufw:
     state: enabled
@@ -63,13 +69,19 @@
 - name: Configure Nginx
   template:
     src: nginx.conf.j2
-    dest: /var/www/inventory-app2
+    dest: /etc/nginx/sites-available/inventory-app2 
 
 - name: Enable Nginx site
   file:
     src: /etc/nginx/sites-available/inventory-app2
     dest: /etc/nginx/sites-enabled/inventory-app2
     state: link
+
+- name: Disable the default Nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
 
 - name: Install Node.js and npm
   apt:
@@ -84,42 +96,42 @@
   args:
     chdir: /var/www/inventory-app2
 
-- name: Install node-polyfill-webpack-plugin
-  command: npm install  node-polyfill-webpack-plugin --save
-  args:
-    chdir: /var/www/inventory-app2
 
-- name: Install browserify-fs
-  command: npm install browserify-fs --save
-  args:
-    chdir: /var/www/inventory-app2
 
-- name: Create webpack.config.js
-  copy:
-    dest: /var/www/inventory-app2/webpack.config.js
-    content: |
-      const path = require('path');
 
-      const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
-      module.exports = {
-          entry: './src/index.js',
-          output: {
 
-              filename: 'bundle.js',
-              path: path.resolve(__dirname, 'dist'),
-          },
-          resolve: {
-              fallback: {
-                  fs: require.resolve('browserify-fs'),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   
-              },
-          },
-          plugins: [
 
-              new NodePolyfillPlugin(),
-          ],
-      };
+
+
+
+
+
+
 
 - name: Run npm build
   command: npm run build
@@ -143,10 +155,20 @@
     global: yes
     state: present
 
-- name: Start server with pm2
-  command: pm2 start server.js --name inventory-app
+- name: Restart server with pm2
+  command: pm2 restart server
+  register: pm2_restart_result
+  ignore_errors: yes  # Ignore errors in case the server isn't running yet
+
+- name: Start server with pm2 if not running
+  command: pm2 start server.js --name server
   args:
     chdir: /var/www/inventory-app2
+  when: pm2_restart_result is defined and pm2_restart_result.rc != 0 # Only run if the restart failed
+
+
+
+
 
 - name: Restart Nginx
   service:
