@@ -17,18 +17,6 @@
     state: present
     update_cache: yes
 
-
-
-
-
-
-
-
-
-
-
-
-
 - name: Allow HTTP traffic
   ufw:
     rule: allow
@@ -72,7 +60,6 @@
       REACT_APP_DB_PORT={{ db_port }}
       REACT_APP_API_SERVER={{ api_server }}
 
-
 - name: Install Node.js and npm
   apt:
     name: "{{ item }}"
@@ -91,9 +78,6 @@
   args:
     chdir: /var/www/inventory-app2
 
-
-
-
 - name: Set correct permissions for the /var/www/inventory-app2
   file:
     path: /var/www/inventory-app2
@@ -104,61 +88,6 @@
   file:
     path: /var/www/inventory-app2/.env
     mode: '0600'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 - name: Run npm build
   command: npm run build
