@@ -4,7 +4,6 @@
   roles:
     - python
 
-
 - name: Install PostgreSQL on DB server
   hosts: database
   become: yes
