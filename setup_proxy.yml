@@ -1,0 +1,6 @@
+---
+- name: Setup Nginx Proxy Server
+  hosts: proxy
+  become: yes
+  roles:
+    - proxy_server 

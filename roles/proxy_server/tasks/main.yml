@@ -1,3 +1,90 @@
 ---
-- name: Install Nginx 
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Allow HTTP traffic
+  ufw:
+    rule: allow
+    port: '80'
+    proto: 'tcp'
+
+- name: Allow HTTPS traffic
+  ufw:
+    rule: allow
+    port: '443'
+    proto: 'tcp'
+
+- name: Allow OpenSSH traffic
+  ufw:
+    rule: allow
+    port: '22'
+    proto: 'tcp'
+
+- name: Allow traffic on for api server
+  ufw:
+    rule: allow
+    port: '3000'
+    proto: 'tcp'
+
+- name: Allow PSQL traffic on port 5432
+  ufw:
+    rule: allow
+    port: '5432'
+    proto: 'tcp'
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Populate backend servers from inventory
+  set_fact:
+    backend_servers: >-
+      {{ backend_servers | default([]) + [{'name': item, 'url': hostvars[item]['ansible_host'] + ':80'}] }}
+  loop: "{{ groups['web_servers'] }}"
+
+- name: Copy Nginx proxy configuration
+  template:
+    src: nginx-proxy.conf.j2
+    dest: /etc/nginx/sites-available/nginx-proxy.conf
+  vars:
+    backend_servers: "{{ backend_servers }}"
+
+
+
+
+
+- name: Create a symbolic link to enable the site
+  file:
+    src: /etc/nginx/sites-available/nginx-proxy.conf
+    dest: /etc/nginx/sites-enabled/nginx-proxy.conf
+    state: link
+
+- name: restart Nginx
+  service:
+    name: nginx
+    state: restarted
+
+- name: Remove default Nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Ensure Nginx is running
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Reload Nginx to apply changes
+  command: nginx -s reload
 
