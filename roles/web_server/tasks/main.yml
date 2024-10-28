@@ -130,35 +130,9 @@
     chdir: /var/www/inventory-app2
   when: "'server' in pm2_list.stdout"
 
-
-
-
-
-
-
-
-
-
 - name: Start server.js with pm2 if not already running
   command: pm2 start /var/www/inventory-app2/server.js --name server
   when: "'server' not in pm2_list.stdout"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 - name: Generate pm2 startup script
   command: pm2 startup systemd
@@ -171,8 +145,6 @@
 - name: Enable pm2-root service with systemctl
   command: systemctl enable pm2-root
   when: pm2_startup is succeeded
-
-
 
 - name: Restart Nginx
   service:
