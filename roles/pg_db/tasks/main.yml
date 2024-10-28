@@ -14,6 +14,28 @@
   with_items:
     - python3-psycopg2
 
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Allow SSH traffic on port 22
+  ufw:
+    rule: allow
+    port: '22'
+    proto: 'tcp'
+
+- name: Allow PostgreSQL traffic on port 5432
+  ufw:
+    rule: allow
+    port: '5432'
+    proto: 'tcp'
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+
 - name: Check if postgres cluster directory existS
   command: pg_lsclusters
 
