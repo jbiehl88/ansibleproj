@@ -121,18 +121,18 @@
 
 - name: Check if server.js is already running in pm2
   command: pm2 list
-  register: pm2_list
-  changed_when: false
+  register: ansible_pm2_processes
+  ignore_errors: true 
 
 - name: Restart server.js with pm2 if already running
   command: pm2 restart server
   args:
     chdir: /var/www/inventory-app2
-  when: "'server' in pm2_list.stdout"
+  when: "'server' in ansible_pm2_processes.stdout"
 
 - name: Start server.js with pm2 if not already running
   command: pm2 start /var/www/inventory-app2/server.js --name server
-  when: "'server' not in pm2_list.stdout"
+  when: "'server' not in ansible_pm2_processes.stdout"
 
 - name: Generate pm2 startup script
   command: pm2 startup systemd

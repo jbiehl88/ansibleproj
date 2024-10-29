@@ -1,0 +1,40 @@
+---
+- name: Setup SSH access for proxyserver
+  hosts: web_server03 
+  become: yes
+  tasks:
+    - name: Ensure the SSH directory exists
+      file:
+        path: /home/proxyserver/.ssh
+        state: directory
+        owner: proxyserver
+        group: proxyserver
+        mode: '0700'
+
+    - name: Copy the public key to authorized_keys
+      authorized_key:
+        user: proxyserver
+        state: present
+        key: "{{ lookup('file', '/home/anscontroller/.ssh/id_rsa.pub') }}"
+
+    - name: Ensure SSH daemon allows password authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+        state: present
+      notify: Restart SSH
+
+    - name: Ensure SSH daemon allows public key authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PubkeyAuthentication'
+        line: 'PubkeyAuthentication yes'
+        state: present
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: ssh
+        state: restarted
