@@ -23,11 +23,6 @@ server {
         proxy_set_header Host $host;
     }
 
-
-
-
-
-
     location /static/ {
         proxy_pass http://backend/static;  # Passes static requests to the web servers
         proxy_set_header Host $host;
