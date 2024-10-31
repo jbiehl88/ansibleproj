@@ -25,7 +25,6 @@
     - name: Assert that application response is successful
       assert:
 
-
         that:
           - app_response.status == 200
         fail_msg: "Application did not return a successful response. Status code: {{ app_response.status }}"
@@ -45,7 +44,6 @@
       command: sudo systemctl is-active nginx
       register: nginx_status
       changed_when: false
-
 
     - name: Assert that Nginx is running
       assert:
@@ -98,51 +96,3 @@
         that:
           - postgresql_service_status.stdout == 'active'
         fail_msg: "PostgreSQL service is not running."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
