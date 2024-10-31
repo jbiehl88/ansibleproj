@@ -1,35 +1,119 @@
 ---
-- name: End-to-End Test for Web Server and Database Connectivity
+- name: End-to-End Test for Web Server
   hosts: web_servers
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Verify server.js is running
+      command: sudo pm2 list
+      register: pm2_processes
+      failed_when: false
+      changed_when: false
+
+    - name: Assert that server.js is running
+      assert:
+        that:
+          - "'server' in pm2_processes.stdout"
+        fail_msg: "server.js is not running in PM2"
+
+    - name: Check application response
+      uri:
+        url: "http://localhost"
+        method: GET
+      register: app_response
+
+    - name: Assert that application response is successful
+      assert:
+
+
+        that:
+          - app_response.status == 200
+        fail_msg: "Application did not return a successful response. Status code: {{ app_response.status }}"
+
+    - name: Test Nginx configuration
+      command: nginx -t
+      register: nginx_test
+      changed_when: false
+
+    - name: Assert that Nginx configuration is valid
+      assert:
+        that:
+          - nginx_test.rc == 0
+        fail_msg: "Nginx configuration test failed. Return code: {{ nginx_test.rc }}. Output: {{ nginx_test.stdout }}."
+
+    - name: Check if Nginx is active
+      command: sudo systemctl is-active nginx
+      register: nginx_status
+      changed_when: false
+
+
+    - name: Assert that Nginx is running
+      assert:
+        that:
+          - nginx_status.stdout == 'active'
+        fail_msg: "Nginx is not running. Status: {{ nginx_status.stdout }}"
+
+- name: End-to-End Test for Proxy Server
+  hosts: proxy
+  become: yes
   gather_facts: no
   tasks:
 
+    - name: Test Nginx configuration
+      command: sudo nginx -t
+      register: nginx_test
+      failed_when: false
+      changed_when: false
 
-
-
-
-
-
-
-
-
-
-
-
-
-    - name: Test API endpoint
-      uri:
-        url: "http://{{ inventory_hostname }}:3000/api/items"  # inventory_hostname targets each web server
-        method: GET
-      register: api_result
-      ignore_errors: yes
-
-    - name: Verify API endpoint is accessible on each server
+    - name: Assert that Nginx configuration is valid
       assert:
         that:
-          - api_result.status == 200
-        fail_msg: "API endpoint is not reachable on {{ inventory_hostname }}."
-        success_msg: "API endpoint is accessible on {{ inventory_hostname }}."
+          - nginx_test.rc == 0
+        fail_msg: "Nginx configuration is invalid."
+
+    - name: Check if Nginx is active
+      command: sudo systemctl is-active nginx
+      register: nginx_active
+      changed_when: false
+
+    - name: Assert that Nginx is running
+      assert:
+        that:
+          - nginx_active.stdout == 'active'
+        fail_msg: "Nginx is not running."
+
+- name: End-to-End Test for Web Server
+  hosts: database
+  become: yes
+  gather_facts: no
+  tasks:
+
+    - name: Check PostgreSQL service status
+      command: sudo systemctl is-active postgresql
+      register: postgresql_service_status
+      changed_when: false
+
+    - name: Assert that PostgreSQL service is active
+      assert:
+        that:
+          - postgresql_service_status.stdout == 'active'
+        fail_msg: "PostgreSQL service is not running."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
