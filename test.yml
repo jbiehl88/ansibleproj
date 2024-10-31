@@ -1,0 +1,64 @@
+---
+- name: End-to-End Test for Web Server and Database Connectivity
+  hosts: web_servers
+  gather_facts: no
+  tasks:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    - name: Test API endpoint
+      uri:
+        url: "http://{{ inventory_hostname }}:3000/api/items"  # inventory_hostname targets each web server
+        method: GET
+      register: api_result
+      ignore_errors: yes
+
+    - name: Verify API endpoint is accessible on each server
+      assert:
+        that:
+          - api_result.status == 200
+        fail_msg: "API endpoint is not reachable on {{ inventory_hostname }}."
+        success_msg: "API endpoint is accessible on {{ inventory_hostname }}."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

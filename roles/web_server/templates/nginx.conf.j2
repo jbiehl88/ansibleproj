@@ -3,7 +3,7 @@ server {
     server_name {{ ansible_hostname}};
 
     location / {
-        root /var/www/inventory-app2/build;  # Change to your build directory
+        root /var/www/inventory-app2/build;
         index index.html index.htm;
         try_files $uri $uri/ /index.html;
     }
@@ -12,8 +12,15 @@ server {
         root /var/www/inventory-app2/build/;
     }
 
+    location /src/ {
+        # Serve files from the src directory
+        alias /var/www/inventory-app2/src/;
+        try_files $uri $uri/ =404;
+        add_header Content-Type application/javascript;
+    }
+
     location /api {
-        proxy_pass http://localhost:3000;  # Adjust the port as needed for your API server
+        proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

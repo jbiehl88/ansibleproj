@@ -13,6 +13,14 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    location /src/ {
+        proxy_pass http://backend;  # Forward requests to the backend servers defined in the upstream block
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location /static/js/main.407682f6.js {
         proxy_pass http://192.168.64.131/static/js/main.407682f6.js;  # Directly proxy to the server with this file
         proxy_set_header Host $host;
@@ -22,6 +30,20 @@ server {
         proxy_pass http://192.168.64.133/static/js/main.150356cb.js;  # Directly proxy to the server with this file
         proxy_set_header Host $host;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     location /static/ {
         proxy_pass http://backend/static;  # Passes static requests to the web servers
