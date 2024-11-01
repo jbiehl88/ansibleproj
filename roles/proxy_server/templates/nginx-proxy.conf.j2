@@ -21,16 +21,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-
-
-
-
-
-
-
-
-
-
     location ~ ^/static/js/main\.[0-9a-f]+\.js$ {
         proxy_pass http://backend;
         proxy_set_header Host $host;
