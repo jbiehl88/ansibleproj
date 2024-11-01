@@ -1,0 +1,35 @@
+---
+- name: Restart for Web Servers
+  hosts: web_servers
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Restart server.js with pm2
+      command: sudo pm2 restart server
+      args:
+        chdir: /var/www/inventory-app2
+      
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+- name: Restart for Proxy Server
+  hosts: proxy
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+- name: Restart for Database
+  hosts: database 
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: restart postgres
+      service:
+        name: postgresql
+        state: restarted

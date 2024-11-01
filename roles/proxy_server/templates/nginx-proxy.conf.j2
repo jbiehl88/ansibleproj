@@ -21,13 +21,18 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /static/js/main.407682f6.js {
-        proxy_pass http://192.168.64.131/static/js/main.407682f6.js;  # Directly proxy to the server with this file
-        proxy_set_header Host $host;
-    }
 
-    location /static/js/main.150356cb.js {
-        proxy_pass http://192.168.64.133/static/js/main.150356cb.js;  # Directly proxy to the server with this file
+
+
+
+
+
+
+
+
+
+    location ~ ^/static/js/main\.[0-9a-f]+\.js$ {
+        proxy_pass http://backend;
         proxy_set_header Host $host;
     }
 

@@ -80,7 +80,7 @@
           - nginx_active.stdout == 'active'
         fail_msg: "Nginx is not running."
 
-- name: End-to-End Test for Web Server
+- name: End-to-End Test for Database 
   hosts: database
   become: yes
   gather_facts: no
