@@ -10,13 +10,13 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 2. `Either manually create an ssh key pair and add the public key to your hosts in trusted devices OR when creating your hosts, make sure the public key is added in configuration to allow Ansible to communicate to the hosts. There is an untested ansible script for the handshake included in this project but for my instance, the VMs had to be a manually configured handshake.`
 3. `Adjust the inventory.ini file to include your created VM hosts. For my use, since I was using my local resources, I kept things minimal with one database server, one proxy server, and three web servers.`
 4. `Once the ssh handshake and adjustments made to your inventory file are complete, you can test your connection to the hosts by running the ping.yml playbook. (ansible-playbook -i inventory.ini ping.yml)`
-5. `Next step is to go into the roles directory -> web_server directory and create a directory called vars. Within the vars directory, create a file called main.yml. This file contains sensitive data so make sure it is included into your gitignore file. The file should be createed to include the following:\
+5. Next step is to go into the roles directory -> web_server directory and create a directory called vars. Within the vars directory, create a file called main.yml. This file contains sensitive data so make sure it is included into your gitignore file. The file should be createed to include the following:\
 db_host:(host ip of your selected database server)\
 db_user:(username created when creating the database)\
 db_password:(password for database)\
 db_name:(name of the database you wish to connect with)\
 db_port: 5432 (default for postgres)\
-api_server: "http://{{ ansible_default_ip4.address }}" this is dynamically gathered by ansible`\
+api_server: "http://{{ ansible_default_ip4.address }}" this is dynamically gathered by ansible\
 6. `Change directory to the root of your project, and run the playbook labeled setup.yml - (ansible-playbook -i inventory.ini setup.yml -u <username_on_host_machine> --ask-become-pass)`
 7. `The script will ask for a password, this password will be the root password created during the VM creation using the Debian OS.`
 8. `If that playbook runs successfully, run the playbook labeled setup_proxy.yml - (ansible-playbook -i inventory.ini setup_proxy.yml -u <username_on_host_machine> --ask-become-pass)`
