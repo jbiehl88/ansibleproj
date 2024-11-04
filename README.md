@@ -49,12 +49,12 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 - Ansible 2.14.16
 - Python 3.11.2
 - Jinja 3.1.2
-- NGINX
-- PM2
-- Node
-- Express
-- React
-- Sequelize
+- NGINX 1.22.1
+- PM2 5.4.2
+- Node 9.2.0
+- Express 4.17.3
+- React 18.2.0
+- Sequelize 6.37.4
 
 ## Backlog
 
