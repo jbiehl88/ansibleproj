@@ -23,7 +23,7 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 9. If that playbook also runs successfully, a test script labeled `test.yml` can be run to verify `NGINX` is runing on the web and proxy servers, `POSTGRES` is running on the database server, and the `API` servers are running in pm2 locally on the web servers.
 10. ****Other configurations may be required based on the project you are wanting to host from your github as well as the required structure that NGINX expects within your selected project****
 
-## Procedure
+## My Project Procedure
 ### Ansible
 - Install Ansible on controller (linux required).
 - Host 3 VMs (minimum) either locally or on a cloud provider.
