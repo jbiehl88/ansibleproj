@@ -55,6 +55,7 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 - Express 4.17.3
 - React 18.2.0
 - Sequelize 6.37.4
+- PostgreSQL 15.8
 
 ## Backlog
 
