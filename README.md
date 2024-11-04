@@ -6,26 +6,24 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 
 ## Getting Started
 
-1. `Ansible installed on a linux based device that will be your dedicated Ansible Controller, either a hosted device or you local device.`
-2. `Either manually create an ssh key pair and add the public key to your hosts in trusted devices OR when creating your hosts, make sure the public key is added in configuration to allow Ansible to communicate to the hosts. There is an untested ansible script for the handshake included in this project but for my instance, the VMs had to be a manually configured handshake.`
-3. `Adjust the inventory.ini file to include your created VM hosts. For my use, since I was using my local resources, I kept things minimal with one database server, one proxy server, and three web servers.`
-4. `Once the ssh handshake and adjustments made to your inventory file are complete, you can test your connection to the hosts by running the ping.yml playbook. (ansible-playbook -i inventory.ini ping.yml)`
-5. Next step is to go into the roles directory -> web_server directory and create a directory called vars. Within the vars directory, create a file called main.yml. This file contains sensitive data so make sure it is included into your gitignore file. The file should be createed to include the following:\
+1. Ansible installed on a linux based device that will be your dedicated Ansible Controller, either a hosted device or you local device.
+2. Either manually create an ssh key pair and add the public key to your hosts in trusted devices OR when creating your hosts, make sure the public key is added in configuration to allow Ansible to communicate to the hosts. There is an untested ansible script for the handshake included in this project but for my instance, the VMs had to be a manually configured handshake.
+3. Adjust the `inventory.ini` file to include your created VM hosts. For my use, since I was using my local resources, I kept things minimal with one database server, one proxy server, and three web servers.
+4. Once the ssh handshake and adjustments made to your inventory file are complete, you can test your connection to the hosts by running the `ping.yml` playbook. (`ansible-playbook -i inventory.ini ping.yml`)
+5. Next step is to go into the roles directory -> web_server directory and create a directory called `vars`. Within the vars directory, create a file called `main.yml`. This file contains sensitive data so make sure it is included into your `gitignore` file. The file should be createed to include the following:\
   `db_host:`(host ip of your selected database server)\
   `db_user:`(username created when creating the database)\
   `db_password:`(password for database)\
   `db_name:`(name of the database you wish to connect with)\
-  `db_port:` 5432 (default for postgres)\
-  `api_server:` "http://{{ ansible_default_ip4.address }}" this is dynamically gathered by ansible
-6. `Change directory to the root of your project, and run the playbook labeled setup.yml - (ansible-playbook -i inventory.ini setup.yml -u <username_on_host_machine> --ask-become-pass)`
-7. `The script will ask for a password, this password will be the root password created during the VM creation using the Debian OS.`
-8. `If that playbook runs successfully, run the playbook labeled setup_proxy.yml - (ansible-playbook -i inventory.ini setup_proxy.yml -u <username_on_host_machine> --ask-become-pass)`
-9. `If that playbook also runs successfully, a test script labeled test.yml can be run to verify NGINX is runing on the web and proxy servers, POSTGRES is running on the database server, and the API servers are running in pm2 locally on the web servers.`
-10. `****Other configurations may be required based on the project you are wanting to host from your github as well as the required structure that NGINX expects within your selected project****`
+  `db_port:` `5432` (default for postgres)\
+  `api_server:` `"http://{{ ansible_default_ip4.address }}"` this is dynamically gathered by ansible.
+6. Change directory to the `root` of your project, and run the playbook labeled `setup.yml` - (`ansible-playbook -i inventory.ini setup.yml -u <username_on_host_machine> --ask-become-pass`)`
+7. The script will ask for a password, this password will be the `root` password created during the VM creation using the Debian OS.
+8. If that playbook runs successfully, run the playbook labeled `setup_proxy.yml` - (`ansible-playbook -i inventory.ini setup_proxy.yml -u <username_on_host_machine> --ask-become-pass`)
+9. If that playbook also runs successfully, a test script labeled `test.yml` can be run to verify `NGINX` is runing on the web and proxy servers, `POSTGRES` is running on the database server, and the `API` servers are running in pm2 locally on the web servers.
+10. ****Other configurations may be required based on the project you are wanting to host from your github as well as the required structure that NGINX expects within your selected project****
 
-![image](/public/react/assets/TeeJAM.png)
-
-## User Story
+## Procedure
 ### Ansible
 - Install Ansible on controller (linux required).
 - Host 3 VMs (minimum) either locally or on a cloud provider.
@@ -38,7 +36,7 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 - Upon successful completion of the setup.yml playbook, run the playbook labeled setup_proxy.yml
 - If both playbooks run successfully, you can test that all processes are running by running the playbook labeled test.yml.
 
-### Web Application
+### Web Application - User Story
 - From the landing page, you are presented with a full list of available items.
 - Click on any item on the landing page and you will be presented with a new view of that item including all the details of that item as well as an option to go back to the landing page, update the item, or delete item.
 - Clicking on the update button, you will see a new view with 5 form fields that are prefilled with the existing information for easy editing. Once complete with making your changes, click submit and you will be returned to the landing page with the updated information present on the item you updated.
