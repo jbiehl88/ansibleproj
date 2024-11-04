@@ -20,6 +20,7 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 8. If that playbook runs successfully, run the playbook labeled `setup_proxy.yml` - (`ansible-playbook -i inventory.ini setup_proxy.yml -u <username_on_host_machine> --ask-become-pass`)
 9. If that playbook also runs successfully, a test script labeled `test.yml` can be run to verify `NGINX` is runing on the web and proxy servers, `POSTGRES` is running on the database server, and the `API` servers are running in pm2 locally on the web servers.
 10. Finally, there is another Ansible script labeled `restart.yml` that can be run to restart `NGINX`, `POSTGRESQL`, and the `API server` processes. (`ansible-playbook -i inventory.ini test.yml -u <username_on_host_machine> --ask-become-pass`)\
+\
 ****NOTE: Other configurations may be required based on the project you are wanting to host from your github as well as the required structure that NGINX expects within your selected project****
 
 ## My Project Procedure
