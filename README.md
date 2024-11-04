@@ -11,9 +11,9 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 3. `Adjust the inventory.ini file to include your created VM hosts. For my use, since I was using my local resources, I kept things minimal with one database server, one proxy server, and three web servers.`
 4. `Once the ssh handshake and adjustments made to your inventory file are complete, you can test your connection to the hosts by running the ping.yml playbook. (ansible-playbook -i inventory.ini ping.yml)`
 5. `Next step is to go into the roles directory -> web_server directory and create a directory called vars. Within the vars directory, create a file called main.yml. This file contains sensitive data so make sure it is included into your gitignore file. The file should be createed to include the following:
-   db_host:(host ip of your selected database server)
-   db_user:(username created when creating the database)
-   db_password:(password for database)
+   - db_host:(host ip of your selected database server)
+   - db_user:(username created when creating the database)
+   - db_password:(password for database)
    db_name:(name of the database you wish to connect with)
    db_port: 5432 (default for postgres)
    api_server: "http://{{ ansible_default_ip4.address }}" this is dynamically gathered by ansible`
