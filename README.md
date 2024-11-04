@@ -26,7 +26,7 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 ![image](/public/react/assets/TeeJAM.png)
 
 ## User Story
-# Ansible
+### Ansible
 - Install Ansible on controller (linux required).
 - Host 3 VMs (minimum) either locally or on a cloud provider.
 - Create ssh handshake from controller to the other hosts.
@@ -38,7 +38,7 @@ Multiverse Project - An Ansible autmation script to deploy numerous web servers,
 - Upon successful completion of the setup.yml playbook, run the playbook labeled setup_proxy.yml
 - If both playbooks run successfully, you can test that all processes are running by running the playbook labeled test.yml.
 
-# Web Application
+### Web Application
 - From the landing page, you are presented with a full list of available items.
 - Click on any item on the landing page and you will be presented with a new view of that item including all the details of that item as well as an option to go back to the landing page, update the item, or delete item.
 - Clicking on the update button, you will see a new view with 5 form fields that are prefilled with the existing information for easy editing. Once complete with making your changes, click submit and you will be returned to the landing page with the updated information present on the item you updated.
