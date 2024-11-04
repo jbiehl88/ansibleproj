@@ -1,6 +1,4 @@
-# Ansible - Web Server, Proxy Server, Database Server Deployment (Debian)
-
-# Web Deployment Utilizing Ansible
+# Web Deployment Utilizing Ansible (Debian)
 
 Multiverse Project - An Ansible autmation script to deploy numerous web servers, proxy servers, and databases based on your needs. This project is currently just utilzing Debian powered virtual machines to demonstrate its' usability. I have chose to host my virtual machines using VMware to save cost but the script can be used with virtual machinese hosted on cloud providers such as AWS, Azure, and Google Cloud as long as the OS on the hosts are Debian unless the script is modified. This script also utilizes a project repository hosted on GitHub. You can choose to host your own project, however, keep in mind the file structure NGINX expects to host a web server. In my case, I used the project found here: [inventory-app2](https://github.com/jbiehl88/inventory-app2).
 
